@@ -1,0 +1,11 @@
+if (GetAsyncKeyState(45) < 0)
+            {
+                if (this.Visible == true)
+                {
+                    this.Visible = false;
+                }
+                else
+                {
+                    this.Visible = true;
+                }
+            }

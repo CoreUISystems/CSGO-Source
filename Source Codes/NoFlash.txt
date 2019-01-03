@@ -1,0 +1,40 @@
+public static float flashMaxAlpha
+        {
+            get
+            {
+                int BaseAddress = vmr.ReadInt32((IntPtr)Client + ptr.dwLocalPlayer);
+                return vmr.ReadFloat((IntPtr)BaseAddress + ptr.m_flFlashMaxAlpha);
+            }
+            set
+            {
+                int BaseAddress = vmr.ReadInt32((IntPtr)Client + ptr.dwLocalPlayer);
+                vmr.WriteFloat((IntPtr)BaseAddress + ptr.m_flFlashDuration, (float)value);
+                vmr.WriteFloat((IntPtr)BaseAddress + ptr.m_flFlashMaxAlpha, (float)value);
+            }
+        }
+        public static void dwAntiFlash()
+        {
+            if (GetModuleAddress())
+            {
+                int BaseAddress = vmr.ReadInt32((IntPtr)Client + ptr.dwLocalPlayer);
+                float flashVal = vmr.ReadFloat((IntPtr)BaseAddress + ptr.m_flFlashMaxAlpha);
+                while (true)
+                {
+                    int EngineBase = vmr.ReadInt32((IntPtr)Engine.moduleAddress + ptr.dwClientState);
+                    int GameState = vmr.ReadInt32((IntPtr)EngineBase + ptr.dwClientState_State);
+
+                    if (noflash_use == true)
+                    {
+                        if (GameState == 6)
+                        {
+                            flashMaxAlpha = 0f;
+                            Thread.Sleep(350);
+                        }
+                    }
+                    else
+                    {
+                        flashMaxAlpha = 255f;
+                    }
+                }
+            }
+        }

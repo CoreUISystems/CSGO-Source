@@ -1,0 +1,154 @@
+public static void autoAttack()
+        {
+            if (GetModuleAddress())
+            {
+                int fAttack = Client + ptr.dwForceAttack;
+                Random random = new Random();
+
+                while (true)
+                {
+                    int EngineBase = vmr.ReadInt32((IntPtr)Engine.moduleAddress + ptr.dwClientState);
+                    int GameState = vmr.ReadInt32((IntPtr)EngineBase + ptr.dwClientState_State);
+
+                    int a = 1;
+
+                    if(GameState == 6)
+                    {
+                        if(trigger_use == true)
+                        {
+                            int Player = vmr.ReadInt32((IntPtr)Client + ptr.dwLocalPlayer);
+                            int WeaponHandle = vmr.ReadInt32((IntPtr)Player + 0x2EE8);
+                            WeaponHandle &= 0xFFF;
+                            int WeaponEntity = vmr.ReadInt32((IntPtr)Client + ptr.dwEntityList + (WeaponHandle - 1) * 0x10);
+                            int IsScoped = vmr.ReadInt32((IntPtr)Player + ptr.m_bIsScoped);
+                            int WeaponIndex = vmr.ReadInt32((IntPtr)WeaponEntity + 0x2F9A);
+
+                            if (trigger_scope == true)
+                            {
+                                int address = Client + ptr.dwLocalPlayer;
+                                int dwPlayer = vmr.ReadInt32((IntPtr)address);
+
+                                address = dwPlayer + ptr.m_iTeamNum;
+                                int MyTeam = vmr.ReadInt32((IntPtr)address);
+
+                                address = dwPlayer + ptr.m_iCrosshairId;
+                                int PlayerInCross = vmr.ReadInt32((IntPtr)address);
+
+                                if (PlayerInCross > 0 && PlayerInCross < 65)
+                                {
+                                    address = Client + ptr.dwEntityList + (PlayerInCross - 1) * 0x0000010;
+                                    int PtrToPIC = vmr.ReadInt32((IntPtr)address);
+
+                                    address = PtrToPIC + ptr.m_iHealth;
+                                    int PICHealth = vmr.ReadInt32((IntPtr)address);
+
+                                    address = PtrToPIC + ptr.m_iTeamNum;
+                                    int PICTeam = vmr.ReadInt32((IntPtr)address);
+
+                                    if ((PICTeam != MyTeam) && (PICTeam > 1) && (PICHealth > 0))
+                                    {
+                                        for (int i = 0; i < 2; i++)
+                                        {
+                                            vmr.WriteInt32((IntPtr)fAttack, 1);
+                                            Thread.Sleep(sprTime);
+                                            vmr.WriteInt32((IntPtr)fAttack, 4);
+                                        }
+                                    }
+                                }
+                                Thread.Sleep(10);
+                            }
+                            else
+                            {
+                                if (IsScoped != 1)
+                                {
+                                    if (WeaponIndex == 9) //AWP
+                                    {
+
+                                    }
+                                    else if (WeaponIndex == 11) //T AUTO
+                                    {
+
+                                    }
+                                    else if (WeaponIndex == 40) //SSG
+                                    {
+
+                                    }
+                                    else if (WeaponIndex == 38) //CT AUTO
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        int address = Client + ptr.dwLocalPlayer;
+                                        int dwPlayer = vmr.ReadInt32((IntPtr)address);
+
+                                        address = dwPlayer + ptr.m_iTeamNum;
+                                        int MyTeam = vmr.ReadInt32((IntPtr)address);
+
+                                        address = dwPlayer + ptr.m_iCrosshairId;
+                                        int PlayerInCross = vmr.ReadInt32((IntPtr)address);
+
+                                        if (PlayerInCross > 0 && PlayerInCross < 65)
+                                        {
+                                            address = Client + ptr.dwEntityList + (PlayerInCross - 1) * 0x0000010;
+                                            int PtrToPIC = vmr.ReadInt32((IntPtr)address);
+
+                                            address = PtrToPIC + ptr.m_iHealth;
+                                            int PICHealth = vmr.ReadInt32((IntPtr)address);
+
+                                            address = PtrToPIC + ptr.m_iTeamNum;
+                                            int PICTeam = vmr.ReadInt32((IntPtr)address);
+
+                                            if ((PICTeam != MyTeam) && (PICTeam > 1) && (PICHealth > 0))
+                                            {
+                                                for (int i = 0; i < 2; i++)
+                                                {
+                                                    vmr.WriteInt32((IntPtr)fAttack, 1);
+                                                    Thread.Sleep(sprTime);
+                                                    vmr.WriteInt32((IntPtr)fAttack, 4);
+                                                }
+                                            }
+                                        }
+                                        Thread.Sleep(10);
+                                    }
+                                }
+                                else
+                                {
+                                    int address = Client + ptr.dwLocalPlayer;
+                                    int dwPlayer = vmr.ReadInt32((IntPtr)address);
+
+                                    address = dwPlayer + ptr.m_iTeamNum;
+                                    int MyTeam = vmr.ReadInt32((IntPtr)address);
+
+                                    address = dwPlayer + ptr.m_iCrosshairId;
+                                    int PlayerInCross = vmr.ReadInt32((IntPtr)address);
+
+                                    if (PlayerInCross > 0 && PlayerInCross < 65)
+                                    {
+                                        address = Client + ptr.dwEntityList + (PlayerInCross - 1) * 0x0000010;
+                                        int PtrToPIC = vmr.ReadInt32((IntPtr)address);
+
+                                        address = PtrToPIC + ptr.m_iHealth;
+                                        int PICHealth = vmr.ReadInt32((IntPtr)address);
+
+                                        address = PtrToPIC + ptr.m_iTeamNum;
+                                        int PICTeam = vmr.ReadInt32((IntPtr)address);
+
+                                        if ((PICTeam != MyTeam) && (PICTeam > 1) && (PICHealth > 0))
+                                        {
+                                            for (int i = 0; i < 2; i++)
+                                            {
+                                                vmr.WriteInt32((IntPtr)fAttack, 1);
+                                                Thread.Sleep(sprTime);
+                                                vmr.WriteInt32((IntPtr)fAttack, 4);
+                                            }
+                                        }
+                                    }
+                                    Thread.Sleep(10);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
